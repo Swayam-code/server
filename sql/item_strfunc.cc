@@ -552,8 +552,8 @@ const char *representation_by_type[]= {"%.3f", "%.5f"};
 String *Item_func_decode_histogram::val_str(String *str)
 {
   DBUG_ASSERT(fixed());
-  char buff[STRING_BUFFER_USUAL_SIZE];
-  String *res, tmp(buff, sizeof(buff), &my_charset_bin);
+  StringBuffer<STRING_BUFFER_USUAL_SIZE> tmp;
+  String *res;
   int type;
 
   tmp.length(0);
@@ -4796,8 +4796,8 @@ bool Item_func_dyncol_create::fix_length_and_dec(THD *thd)
 
 bool Item_func_dyncol_create::prepare_arguments(THD *thd, bool force_names_arg)
 {
-  char buff[STRING_BUFFER_USUAL_SIZE];
-  String *res, tmp(buff, sizeof(buff), &my_charset_bin);
+  StringBuffer<STRING_BUFFER_USUAL_SIZE> tmp;
+  String *res;
   uint column_count= (arg_count / 2);
   uint i;
   my_decimal dtmp, *dres;
@@ -5236,8 +5236,7 @@ bool Item_dyncol_get::get_dyn_value(THD *thd, DYNAMIC_COLUMN_VALUE *val,
 String *Item_dyncol_get::val_str(String *str_result)
 {
   DYNAMIC_COLUMN_VALUE val;
-  char buff[STRING_BUFFER_USUAL_SIZE];
-  String tmp(buff, sizeof(buff), &my_charset_bin);
+  StringBuffer<STRING_BUFFER_USUAL_SIZE> tmp;
 
   if (get_dyn_value(current_thd, &val, &tmp))
     return NULL;
@@ -5323,8 +5322,7 @@ longlong Item_dyncol_get::val_int()
 {
   THD *thd= current_thd;
   DYNAMIC_COLUMN_VALUE val;
-  char buff[STRING_BUFFER_USUAL_SIZE];
-  String tmp(buff, sizeof(buff), &my_charset_bin);
+  StringBuffer<STRING_BUFFER_USUAL_SIZE> tmp;
 
   if (get_dyn_value(thd, &val, &tmp))
     return 0;
@@ -5389,8 +5387,7 @@ double Item_dyncol_get::val_real()
 {
   THD *thd= current_thd;
   DYNAMIC_COLUMN_VALUE val;
-  char buff[STRING_BUFFER_USUAL_SIZE];
-  String tmp(buff, sizeof(buff), &my_charset_bin);
+  StringBuffer<STRING_BUFFER_USUAL_SIZE> tmp;
 
   if (get_dyn_value(thd, &val, &tmp))
     return 0.0;
@@ -5448,8 +5445,7 @@ my_decimal *Item_dyncol_get::val_decimal(my_decimal *decimal_value)
 {
   THD *thd= current_thd;
   DYNAMIC_COLUMN_VALUE val;
-  char buff[STRING_BUFFER_USUAL_SIZE];
-  String tmp(buff, sizeof(buff), &my_charset_bin);
+  StringBuffer<STRING_BUFFER_USUAL_SIZE> tmp;
 
   if (get_dyn_value(thd, &val, &tmp))
     return NULL;
@@ -5506,8 +5502,7 @@ null:
 bool Item_dyncol_get::get_date(THD *thd, MYSQL_TIME *ltime, date_mode_t fuzzydate)
 {
   DYNAMIC_COLUMN_VALUE val;
-  char buff[STRING_BUFFER_USUAL_SIZE];
-  String tmp(buff, sizeof(buff), &my_charset_bin);
+  StringBuffer<STRING_BUFFER_USUAL_SIZE> tmp;
   bool signed_value= 0;
 
   if (get_dyn_value(current_thd, &val, &tmp))
